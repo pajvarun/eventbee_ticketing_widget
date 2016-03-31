@@ -1,56 +1,29 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title></title>
-	<!-- bower:css -->
-	<link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
-	<!-- endbower -->
+    <head>
+        <title>
+        </title>
+        <meta content="width=device-width, initial-scale=1" name="viewport"/>
+        <!-- bower:css -->
+        <link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
+        <!-- endbower -->
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet"/>
+        <!-- bower:js -->
+        <script src="bower_components/angular/angular.js"></script>
+        <script src="bower_components/angular-animate/angular-animate.js"></script>
+        <script src="bower_components/angular-aria/angular-aria.js"></script>
+        <script src="bower_components/angular-messages/angular-messages.js"></script>
+        <script src="bower_components/angular-material/angular-material.js"></script>
 
-	<!-- bower:js -->
-	<script src="bower_components/angular/angular.js"></script>
-	<script src="bower_components/angular-animate/angular-animate.js"></script>
-	<script src="bower_components/angular-aria/angular-aria.js"></script>
-	<script src="bower_components/angular-messages/angular-messages.js"></script>
-	<script src="bower_components/angular-material/angular-material.js"></script>
-	<!-- endbower -->
-	<script type="text/javascript" src="app.js"></script>
-</head>
-<body ng-app="eventbee">
-<md-content class="md-padding">
-	<div ng-controller="ticket">
-		<div ng-show="data.do_continue">
-			<div ng-show="data.is_recurring" id="recurring_eve">
-				<md-input-container layout="column">
-					<label>Select Date</label>
-					<md-select ng-model="date_selected" ng-change="displayTickets()">
-						<md-option ng-repeat="date in data.dates" value="{{date.value}}">
-							{{date.name}}
-						</md-option>
-					</md-select>
-				</md-input-container>
-			</div>
-		</div>
-		<md-list ng-show="tickets">
-			<md-subheader class="md-no-sticky">Tickets for the selected date</md-subheader>
-			<md-list-item class="md-2-line" ng-repeat="ticket in tickets.items">
-				<md-icon md-svg-src="ic_local_movies_black_24px.svg"></md-icon>
-				<div class="md-list-item-text">
-					<h3> {{ticket.name}} </h3>
-					<p> {{ticket.desc}} </p>
-				</div>
-				<md-select ng-model="ticket.ticket_selected">
-					<md-option selected value="{{ticket.ticket_selected}}">
-						{{ticket.ticket_selected}}
-					</md-option>
-					<md-option ng-repeat="num in [] | range:ticket.max:ticket.min" value="{{num}}">
-						{{num}}
-					</md-option>
-				</md-select>
-				<md-divider></md-divider>
-			</md-list-item>
-			
-		</md-list>
-	</div>
-</md-content>
-</body>
+        <!-- endbower -->
+        
+    </head>
 </html>
+<body ng-app="eventbee">
+   <div ng-view></div>
+</body>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-route.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-sanitize.min.js"></script>
+<script type="text/javascript" src="app.js"></script>
+<script type="text/javascript" src="services.js"></script>
+<script type="text/javascript" src="controller.tickets.js"></script>

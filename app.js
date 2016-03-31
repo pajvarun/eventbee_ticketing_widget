@@ -1,31 +1,68 @@
-var eventbee = angular.module('eventbee', ['ngMaterial']);
-eventbee.controller('ticket', ['$scope', '$http', function($scope, $http) {
-    $scope.data = "";
-    $scope.dates = [];
-    var get_dates = $http.get('http://192.168.1.85/tktwidget/registration/getEventMetaData.jsp?api_key=123&event_id=112500213');
-    get_dates.success(function(data, status, headers, config) {
-        $scope.data = data;
-    });
-    get_dates.error(function(data, status, headers, config) {
-        alert('Unknown error occured. Please try reloading the page.');
-    });
-    $scope.displayTickets = function() {
-        var get_tickets = $http.get('http://192.168.1.85/tktwidget/registration/getEventTickets.jsp?api_key=123&event_id=112500213&event_date=' + encodeURIComponent($scope.date_selected));
-        get_tickets.success(function(data, status, headers, config) {
-            $scope.tickets = data;
-        });
-        get_tickets.error(function(data, status, headers, config) {
-            alert('Unknown error occured. Please try reloading the page.');
-        });
-    };
+var eventbee = angular.module('eventbee', [
+    'ngMaterial',
+    'ngRoute',
+    'ngAnimate',
+    'ngSanitize',
+    'eventbee.controller.tickets',
+    'eventbee.services']);
+// GLOBAL CONFIGURATIONS
+eventbee.config(['$routeProvider', '$locationProvider', '$sceDelegateProvider','$provide', function($routeProvider, $locationProvider, $sceDelegateProvider,$provide){
+    $provide.decorator('$sniffer', ['$delegate', function ($delegate) {
+        $delegate.history = false;
+        return $delegate;
+        }]);
+    
+        $sceDelegateProvider.resourceUrlWhitelist([
+            'self',
+            '**'
+    ]);
+        //enable html5 mode
+        $locationProvider.html5Mode(false);
+
+        $routeProvider
+            .when('/event', {
+                templateUrl: 'tickets.html',
+                //controller: 'tickets',
+                reloadOnSearch: false
+            })/*
+            .when('/event/profile', {
+                templateUrl: '/tktwidget/public/profile.html',
+                controller: 'profile',
+                reloadOnSearch: false
+            })
+            .when('/event/payment', {
+                templateUrl: '/tktwidget/public/payment.html',
+                controller: 'payment',
+                reloadOnSearch: false
+            })
+            .when('/event/confirmation', {
+                templateUrl: '/tktwidget/public/confirmation.html',
+                controller: 'confirmation',
+                reloadOnSearch: false
+            })*/
+            .otherwise({
+                redirectTo: '/event'
+            });
 }]);
-eventbee.filter('range', function() {
-    return function(input, max, min) {
-        max = parseInt(max);
-        min = parseInt(min);
-        for (var i = min; i < max; i++) {
-            input.push(i);
-        }
-        return input;
-    };
-});
+
+// ROOT SCOPE
+eventbee.run(['$rootScope','$location','$window','$document','$http', function($rootScope,$location,$window,$document,$http){
+    $rootScope.back = function() {
+        //alert($rootScope.pageLocation);
+        if($rootScope.pageLocation == 'Profiles')
+            $location.path('/event');
+        else if($rootScope.pageLocation == 'Payments'){
+            $location.search('tid',$rootScope.transactionId);
+            $location.path('/event/profile/');
+        }else if($rootScope.pageLocation == 'Confirmation')
+            $location.path('/event/payment/');
+        else
+            $location.path('/event');
+        };
+
+        $rootScope.baseUrl = 'http://192.168.1.85/tktwidget/registration/';
+        $rootScope.serverAddress = 'http://192.168.1.85/';
+        $rootScope.eid = $location.search().eid;
+        $rootScope.pageLocation = 'Tickets';
+        $rootScope.isSeatingEvent = false;
+}]);

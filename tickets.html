@@ -1,0 +1,79 @@
+
+    <md-content class="md-padding">
+        <div ng-controller="tickets">
+            <div ng-show="data.do_continue">
+                <div id="recurring_eve" ng-show="data.is_recurring">
+                    <md-input-container layout="column">
+                        <label>
+                            {{data.date_default_option}}
+                        </label>
+                        <md-select ng-change="displayTickets()" ng-model="date_selected">
+                            <md-option ng-repeat="date in data.dates" value="{{date.value}}">
+                                {{date.name}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+            </div>
+
+            <div layout="row" layout-align="center center" ng-show="loadingMetadata">
+             <img src="image/loading.gif"> Lading...
+            </div>
+            <div layout="row" layout-align="center center" md-ink-ripple ng-hide="data.do_continue">
+                <h3>{{ data.message }}</h3>
+            </div>
+
+            <md-list ng-show="tickets">
+                <!-- <md-subheader class="md-no-sticky">
+                    Tickets for the selected date
+                </md-subheader> -->
+                <md-list-item class="md-2-line" ng-repeat="ticket in tickets.items"  md-ink-ripple ng-click="des = des ? false : true">
+                    
+                    <div class="md-list-item-text"  >
+                   
+                   	<div layout>
+                        <h3 style="text-align: left;"  flex >
+                            <i class="fa fa-ticket" style="font-size: 1em"></i>&nbsp;{{ticket.name}}
+                        </h3>
+                    </div>
+
+
+
+                        <p style="font-size:12px; text-align: left;" ng-show="des">
+                            {{ticket.desc}}
+                        </p>
+                    </div>
+                    <div class="md-list-item-text">
+                        <span class="bodytextstyle" ng-class="{'cut':parseFloat(ticket.actual_price) &gt; parseFloat(ticket.charging_price)}">
+                            {{ ticket.actual_price | currency:data.currency }}
+                        </span>
+                        <span class="bodytextstyle" ng-show="parseFloat(ticket.actual_price) &gt; parseFloat(ticket.charging_price)">
+                            {{ ticket.charging_price | currency:data.currency }}
+                        </span>
+                    </div>
+                    <md-select ng-model="ticket.ticket_selected">
+                        <md-option selected="" value="0">
+                            0
+                        </md-option>
+                        <md-option ng-repeat="num in [] | range:ticket.max:ticket.min" value="{{num}}">
+                            {{num}}
+                        </md-option>
+                    </md-select>
+                    <md-divider>
+                    </md-divider>
+                    
+                </md-list-item>
+                <section layout="row" layout-align="center center" layout-sm="column" layout-wrap="" ng-if="displayBtn" >
+                    <span flex="">
+                    </span>
+                    <h4 class="">
+                        {{ tickets.reg_flow_wordings.total_amount_label }} : {{ total() | currency:data.currency }}
+                    </h4>
+                    <md-button class="md-raised md-warn" ng-click="buy()" ng-disabled="!total()">
+                        {{tickets.reg_flow_wordings.order_button_label}}
+                    </md-button>
+                </section>
+            </md-list>
+
+        </div>
+    </md-content>
