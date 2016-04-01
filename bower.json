@@ -16,6 +16,8 @@
     "tests"
   ],
   "dependencies": {
-    "angular-material": "master"
+    "angular-material": "master",
+    "angular-route": "^1.5.3",
+    "angular-sanitize": "^1.5.3"
   }
 }

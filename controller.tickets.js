@@ -6,6 +6,9 @@ angular.module('eventbee.controller.tickets', [])
     $scope.loadingMetadata = true;
     $scope.displayBtn=false;
     $scope.eventDate = '';
+    $scope.feecolrequeired = 'Y';
+    $scope.showDesc = '';
+    $scope.showGroupDesc = '';
 
      if ($location.search().eid && !isNaN($location.search().eid)){
         $http.get( $rootScope.baseUrl + 'getEventMetaData.jsp?api_key=123&event_id=' + $rootScope.eid)
@@ -18,7 +21,7 @@ angular.module('eventbee.controller.tickets', [])
             else{
                 $scope.$watch('date_selected', function(newVal,oldVal){
                     if (newVal == null){
-                        $scope.ticketsData = {items:[]};
+                        $scope.tickets = {items:[]};
                     }
 
                     if (newVal){
@@ -47,7 +50,13 @@ angular.module('eventbee.controller.tickets', [])
             $scope.tickets = data;
             $scope.data.currency = data.currency;
             $scope.loadingMetadata = false;
-            $scope.displayBtn = true;
+            if($scope.tickets.items.length == 0)
+                $scope.displayBtn = false;
+            else
+                $scope.displayBtn = true;
+            $scope.feecolrequeired= data.feecolrequeired;
+            $scope.showDesc = $scope.tickets.ticket_desc_mode != 'collapse';
+            $scope.showGroupDesc = $scope.tickets.ticket_group_desc_mode != 'collapse';
         })
         .error(function(data,status,headers,config){
 
@@ -57,15 +66,24 @@ angular.module('eventbee.controller.tickets', [])
      
     $scope.total = function() {
         var total = 0;
-        $scope.tickt=$scope.tickets;
         angular.forEach($scope.tickets.items, function(item, index) {
-            if (item.is_donation == 'n') {
-                total += (parseFloat(item.charging_price) + parseFloat(item.charging_fee)) * parseFloat(item.ticket_selected);
-            } else if (item.is_donation == 'y') {
-                if (item.donation_amount) total += parseFloat(item.donation_amount);
+            if (item.type == 'ticket') {
+                if (item.is_donation == 'n') {
+                    total += (parseFloat(item.charging_price) + parseFloat(item.charging_fee)) * parseFloat(item.ticket_selected);
+                } else if (item.is_donation == 'y') {
+                    if (item.donation_amount) total += parseFloat(item.donation_amount);
+                }
+            }else if(item.type == 'group'){
+                angular.forEach(item.tickets, function(item, index) {
+                    if (item.is_donation == 'n') {
+                        total += (parseFloat(item.charging_price) + parseFloat(item.charging_fee)) * parseFloat(item.ticket_selected);
+                    } else if (item.is_donation == 'y') {
+                        if (item.donation_amount)
+                            total += parseFloat(item.donation_amount);
+                    }
+                });
             }
         });
-       
         return total;
     };
     

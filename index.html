@@ -14,16 +14,25 @@
         <script src="bower_components/angular-aria/angular-aria.js"></script>
         <script src="bower_components/angular-messages/angular-messages.js"></script>
         <script src="bower_components/angular-material/angular-material.js"></script>
-
+        <script src="bower_components/angular-route/angular-route.js"></script>
+        <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
         <!-- endbower -->
-        
+        <style>
+        	.groupHeading{
+        		color: #5388c4;
+        	}
+        	.groupTickets{
+        		border-left: 3px solid #5388c4;
+			    padding-left: 5px;
+			    margin-left: -8px;
+			}
+			
+        </style>
     </head>
 </html>
 <body ng-app="eventbee">
    <div ng-view></div>
 </body>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-route.min.js"></script>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-sanitize.min.js"></script>
 <script type="text/javascript" src="app.js"></script>
 <script type="text/javascript" src="services.js"></script>
 <script type="text/javascript" src="controller.tickets.js"></script>

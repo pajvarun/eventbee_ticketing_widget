@@ -1,0 +1,50 @@
+<div ng-if="ticket.is_donation=='n'">
+    <md-list style="padding: 0px">
+        <md-list-item class="md-2-line" md-ink-ripple="" ng-click="showDesc = showDesc ? false : true">
+            <div class="md-list-item-text">
+                <span class="md-title" flex="" style="text-align: left;">
+                    <i class="fa fa-ticket" style="font-size: 1em">
+                    </i>
+                    {{ticket.name}}
+                </span>
+                <p ng-show="showDesc" style="font-size:12px; text-align: left;">
+                    {{ticket.desc}}
+                </p>
+            </div>
+            <div class="md-list-item-text">
+                <span class="md-title" flex="" style="text-align: left;">
+                    <span class="md-title" ng-class="{'cut':parseFloat(ticket.actual_price) &gt; parseFloat(tickets.charging_price)}">
+                        {{ ticket.actual_price | currency:data.currency }}
+                    </span>
+                    <span class="" ng-show="parseFloat(ticket.actual_price) &gt; parseFloat(tickets.charging_price)">
+                        {{ ticket.charging_price | currency:data.currency }}
+                    </span>
+                </span>
+                <span ng-if="tickets.feecolrequeired=='Y'">
+                        <p class="" ng-hide="parseFloat(ticket.actual_fee)&gt;parseFloat(ticket.charging_fee)">
+                            {{ tickets.reg_flow_wordings.process_fee_label }}:
+                            <span ng-class="{'cut':parseFloat(ticket.actual_fee)&gt;parseFloat(ticket.charging_fee)}">
+                                {{ ticket.actual_fee | currency:tickets.currency }}
+                            </span>
+                        </p>
+                        <span style="display: none;">
+                            {{ tickets.reg_flow_wordings.process_fee_label }}:
+                        </span>
+                        <span ng-show="parseFloat(ticket.actual_fee)&gt;parseFloat(ticket.charging_fee)">
+                            {{ ticket.charging_fee | currency:tickets.currency }}
+                        </span>
+                </span>
+            </div>
+            <md-select ng-model="ticket.ticket_selected">
+                <md-option selected="" value="0">
+                    0
+                </md-option>
+                <md-option ng-repeat="num in [] | range:ticket.max:ticket.min" value="{{num}}">
+                    {{num}}
+                </md-option>
+            </md-select>
+            <md-divider>
+            </md-divider>
+        </md-list-item>
+    </md-list>
+</div>
