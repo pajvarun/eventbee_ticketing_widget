@@ -7,7 +7,7 @@
                         <label>
                             {{data.date_default_option}}
                         </label>
-                        <md-select ng-change="displayTickets()" ng-model="date_selected">
+                        <md-select ng-model="date_selected">
                             <md-option ng-repeat="date in data.dates" value="{{date.value}}">
                                 {{date.name}}
                             </md-option>

@@ -65,4 +65,5 @@ eventbee.run(['$rootScope','$location','$window','$document','$http', function($
         $rootScope.eid = $location.search().eid;
         $rootScope.pageLocation = 'Tickets';
         $rootScope.isSeatingEvent = false;
+        $rootScope.selectDate = '';
 }]);

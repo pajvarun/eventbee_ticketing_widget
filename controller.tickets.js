@@ -5,6 +5,7 @@ angular.module('eventbee.controller.tickets', [])
     $scope.currency = '';
     $scope.loadingMetadata = true;
     $scope.displayBtn=false;
+    $scope.eventDate = '';
 
      if ($location.search().eid && !isNaN($location.search().eid)){
         $http.get( $rootScope.baseUrl + 'getEventMetaData.jsp?api_key=123&event_id=' + $rootScope.eid)
@@ -14,7 +15,22 @@ angular.module('eventbee.controller.tickets', [])
             $scope.loadingMetadata = false;
              if (!$scope.data.is_recurring)
                 loadTicketsData($rootScope.baseUrl + 'getEventTickets.jsp?api_key=123&seating_enable='+$rootScope.isSeatingEvent+'&event_id=' + $location.search().eid + ($location.search().tid ? '&transaction_id=' + $location.search().tid : ''));
-                
+            else{
+                $scope.$watch('date_selected', function(newVal,oldVal){
+                    if (newVal == null){
+                        $scope.ticketsData = {items:[]};
+                    }
+
+                    if (newVal){
+                        $scope.eventDate = newVal;
+                        $rootScope.selectDate = newVal;
+                        if($location.search().evtDate==newVal)
+                            loadTicketsData($rootScope.baseUrl + 'getEventTickets.jsp?api_key=123&seating_enable='+$rootScope.isSeatingEvent+'&event_id=' + $location.search().eid + '&event_date=' + encodeURIComponent(newVal)+ ($location.search().tid ? '&transaction_id=' + $location.search().tid : ''));
+                        else
+                            loadTicketsData($rootScope.baseUrl + 'getEventTickets.jsp?api_key=123&seating_enable='+$rootScope.isSeatingEvent+'&event_id=' + $location.search().eid );
+                    }
+                });
+            }
         })
         .error(function(data, status, headers, config) {
             alert('Unknown error occured. Please try reloading the page.');
@@ -38,20 +54,7 @@ angular.module('eventbee.controller.tickets', [])
         });
      }
     
-    $scope.displayTickets = function() {
-        $scope.loadingMetadata = true;
-        var get_tickets = $http.get($rootScope.baseUrl + 'getEventTickets.jsp?api_key=123&event_id=' + $rootScope.eid + '&event_date=' + encodeURIComponent($scope.date_selected));
-        get_tickets.success(function(data, status, headers, config) {
-            $scope.tickets = data;
-            $scope.data.currency = data.currency;
-            $scope.loadingMetadata = false;
-            $scope.displayBtn = true;
-        });
-        get_tickets.error(function(data, status, headers, config) {
-            alert('Unknown error occured. Please try reloading the page.');
-        });
-    };
-    
+     
     $scope.total = function() {
         var total = 0;
         $scope.tickt=$scope.tickets;
