@@ -15,7 +15,7 @@
             </div>
             <div layout="row" layout-align="center center" ng-show="loadingMetadata">
                 <img src="image/loading.gif">
-                    Lading...
+                    Loading...
                 </img>
             </div>
             <div layout="row" layout-align="center center" md-ink-ripple="" ng-hide="data.do_continue">
@@ -24,6 +24,9 @@
                 </h3>
             </div>
         </div>
+
+
+        <div class=""   ng-hide="loadingMetadata">
         <div ng-show="tickets.items.length == 0 &amp;&amp; !data.is_recurring">
             <div layout="row" layout-align="center center" md-ink-ripple="">
                 <h3>
@@ -38,15 +41,14 @@
                     <div class="groupTickets">
                         <md-content>
                             <md-list style="padding: 0px">
-                                <md-list-item class="md-2-line" md-ink-ripple="" ng-click="showGroupDesc = showGroupDesc ? false : true">
+                            <!-- <md-list-item class="md-2-line " md-ink-ripple="" style="background-color: rgba(83, 136, 196, 0.49);" ng-click="showGroupDesc = showGroupDesc ? false : true"> -->
+                                <md-list-item class="md-2-line " md-ink-ripple="" ng-click="showGroupDesc = showGroupDesc ? false : true">
                                     <div class="md-list-item-text">
-                                        <b>
+                                        <b class="md-headline" style="color: #5388C4;">
                                             {{ticket.name}}
                                         </b>
-                                        <div ng-show="showGroupDesc">
-                                            <small ng-bind-html="ticket.desc">
-                                            </small>
-                                        </div>
+                                        <br>
+                                        <div style="font-size:12px;line-height: 12px;" ng-show="showGroupDesc" ng-bind-html="ticket.desc"></div>
                                     </div>
                                 </md-list-item>
                             </md-list>
@@ -63,9 +65,24 @@
                     </div>
                 </div>
             </div>
-            <!-- <md-subheader class="md-no-sticky">
-                    Tickets for the selected date
-                </md-subheader> -->
+            
+            <div class="row inset" ng-show="tickets.disc_exists" layout>
+            <div layout-gt-sm="row" flex>
+                <md-input-container flex="">
+                  <label>{{ tickets.reg_flow_wordings.disc_box_label }}</label>
+                  <input type="text"  ng-model="discountCode">
+                </md-input-container>
+            </div>
+            <div flex >
+                <md-button ng-click="applyDiscount();" class="md-primary md-raised">
+                    {{ tickets.reg_flow_wordings.apply_button_label }}
+                </md-button>
+
+                <img src="image/loading.gif" ng-show="loadingDiscount" />
+                {{ discountsData.disc_msg }}
+            </div>
+            
+            </div>
             <section layout="row" layout-align="center center" layout-sm="column" layout-wrap="" ng-if="displayBtn">
                 <span flex="">
                 </span>
@@ -76,6 +93,37 @@
                     {{tickets.reg_flow_wordings.order_button_label}}
                 </md-button>
             </section>
+
+
+            <!-- Seating section -->
+            <div layout="row" layout-align="center center" ng-show="tickets.items.length > 0 && loadSeating">
+                <img src="image/loading.gif" />&nbsp;Loading Seats...
+            </div>
+            <div  id="seatingsection" ng-if="tickets.items.length > 0 && isSeatingEvent">
+                <div style="border: 1px solid red;  background: none repeat scroll 0px 0px #FBFFAF;" id="tooltip" ng-show="showPopup" ng-style="popupStyle">
+                    <span ng-bind-html="tooltipHtml"></span>
+                </div>
+                <div layout="row">
+                    <div style="width:10%;padding-top:7px;" ng-show="getSectionsLength() > 1">
+                        Select Section :
+                    </div>
+                    <div ng-show="getSectionsLength() > 1">
+                        <select class="form-control" ng-init="initSectionId();setSection(sectionId)" ng-model="sectionId" ng-options="key as value for (key , value) in allSectionObj" ng-change="setSection(sectionId)">
+                        </select>
+                    </div>
+                    <div ng-if="venuePath!=''"><a ng-click="getLayOutImage();" style="cursor:pointer;text-decoration: none;">{{venueName}}</a>
+                    </div>
+                </div>
+                <br>
+                <table ng-style="backgroundCSS" >
+                    <tr ng-repeat="row in getRowSize()">
+                        <td ng-repeat="col in getColSize()" ng-class="{'NA':!seats.completeseats['s_'+row+'_'+col]}">
+                            <img ng-if="seats.completeseats['s_'+row+'_'+col]" ng-mouseover="showSeatDetails(seats.completeseats['s_'+row+'_'+col],$event)" ng-mouseout="hideSeatDetails()" ng-class="getImageCss(seats.completeseats['s_'+row+'_'+col]) && seats.completeseats['s_'+row+'_'+col].seatSelected ? 'selectedSeat' : 'nonSelectedSeat' " ng-click="seats.completeseats['s_'+row+'_'+col].seatSelected=!seats.completeseats['s_'+row+'_'+col].seatSelected; clickSeat(seats.completeseats['s_'+row+'_'+col],seatSectionId+'_'+row+'_'+col)" ng-src="{{getSeatImage(seats.completeseats['s_'+row+'_'+col])}}" style="height: 17px; width: 17px;">
+                        </td>
+                    </tr>
+                </table>
+            </div>            
         </form>
+        </div>
     </div>
 </md-content>

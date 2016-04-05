@@ -7,8 +7,10 @@
         <!-- bower:css -->
         <link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
         <!-- endbower -->
+        <link rel="stylesheet" type="text/css" href="css/style.css" />
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet"/>
         <!-- bower:js -->
+        <script src="bower_components/jquery/dist/jquery.js"></script>
         <script src="bower_components/angular/angular.js"></script>
         <script src="bower_components/angular-animate/angular-animate.js"></script>
         <script src="bower_components/angular-aria/angular-aria.js"></script>
@@ -25,6 +27,8 @@
         		border-left: 3px solid #5388c4;
 			    padding-left: 5px;
 			    margin-left: -8px;
+			    #border-top: 1px dotted #5388c4;
+    			#border-bottom: 1px dotted #5388c4;
 			}
 			
         </style>
@@ -36,3 +40,5 @@
 <script type="text/javascript" src="app.js"></script>
 <script type="text/javascript" src="services.js"></script>
 <script type="text/javascript" src="controller.tickets.js"></script>
+<div id="attendeeloginpopup" class="ticketunavailablepopup_div" style="display:none;"></div>
+

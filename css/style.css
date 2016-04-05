@@ -1,0 +1,264 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:300,400,700);
+@import url(http://fonts.googleapis.com/css?family=Lato:300,400,700);
+ body {
+    /*font-family: 'Open Sans', sans-serif;*/
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    padding: 10px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    /*font-family: 'Open Sans', sans-serif !important;*/
+    font-family: 'Lato', sans-serif !important;
+    font-weight: 700;
+}
+p,
+div,
+a {
+    /*font-family: 'Open Sans', sans-serif;*/
+    font-family: 'Lato', sans-serif;
+    font-weight: 400 !important;
+}
+@media (max-width: 767px) {
+    .float-right {
+        float: right;
+    }
+}
+small {
+    color: #666;
+}
+
+i.fa-plus-square,
+i.fa-minus-square {
+    cursor: pointer;
+    color: #5388c4;
+}
+.headings h5,
+.groupTickets>h4 {
+    color: #5388c4;
+}
+.groupTickets {
+    border-left: 3px solid #5388c4;
+    padding-left: 5px;
+    margin-left: -8px;
+}
+hr {
+    margin: 10px 0 !important;
+}
+.discountCode {
+    padding: 5px;
+    border: 1px dotted orange;
+}
+.cut {
+    text-decoration: line-through;
+    color: #a94442;
+    font-size: .95em;
+}
+.cutname {
+    text-decoration: line-through;
+}
+/* animations */
+
+.ng-hide-add,
+.ng-hide-remove {
+    display: block !important;
+}
+.description {
+    transition: .2s linear all;
+    height: 15px;
+    overflow: hidden;
+}
+.description.ng-hide {
+    height: 0;
+}
+.countdown {
+    position: fixed;
+    top: 0px;
+    left: 0;
+    right: 0;
+    z-index: 999;
+}
+.payment-methods td {
+    padding: 10px 10px 10px 0;
+}
+.paymentDetails tr:last-child {
+    font-weight: bold;
+}
+/* modal dialogs */
+
+.modal-dialog {
+    margin-top: 100px;
+}
+/* Fix for Bootstrap 3 with Angular UI Bootstrap */
+
+.modal {
+    display: block;
+}
+/* Custom dialog/modal headers */
+
+.dialog-header-error {
+    background-color: #d2322d;
+}
+.dialog-header-wait {
+    background-color: #428bca;
+}
+.dialog-header-notify {
+    background-color: #eeeeee;
+}
+.dialog-header-confirm {
+    background-color: #333333;
+}
+.dialog-header-error span,
+.dialog-header-error h4,
+.dialog-header-wait span,
+.dialog-header-wait h4,
+.dialog-header-confirm span,
+.dialog-header-confirm h4 {
+    color: #ffffff;
+}
+/* Ease Display */
+
+.pad {
+    padding: 25px;
+}
+
+#backgroundPopup {
+    background-color: #080808;
+    display: none;
+    height: 4000px;
+    left: 0;
+    opacity: 0.5;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.backgroundPopup{
+	background-color: #080808;
+    height: 4000px;
+    left: 0;
+    opacity: 0.5;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+
+.ticketunavailablepopup_div{
+    background-color: #f5f5f5;
+    border: 20px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 20px #000;
+    color: black;
+    float: left;
+    margin-top: -50px;
+    padding: 20px;
+    position: absolute;
+    width: 250px;
+    z-index: 100003;
+    }
+    .imgclose {
+    border: 0 none;
+    float: right;
+    margin-right: -37px;
+    margin-top: -74px;
+}
+.NA{
+width:5px;
+height:5px;
+}
+
+.selectedSeat {
+	border:1px solid red;
+	margin-right:2px;
+}
+
+.nonSelectedSeat {
+	border:1px solid #fff;
+	border-color: rgba(111,111,111,0) transparent transparent;
+	margin-right:2px;
+}
+
+.imgclosefortkt{
+	border: 0 none;
+	float: right;
+	margin-right: -15px;
+	margin-top: -66px;
+}
+
+[ng\:cloak], [ng-cloak], .ng-cloak {
+  display: none !important;
+}
+
+
+.submitbtn-style:hover {
+    background-position: 0 -1300px;
+    border-color: #7d98b8;
+    color: #000;
+    text-decoration: none;
+}
+.submitbtn-style {
+    background: url("/main/images/sprite.png") repeat-x scroll 0 0 transparent;
+    border: 1px solid #808080;
+    cursor: pointer;
+    font: 12px/1.6 verdana,arial,helvetica,clean,sans-serif;
+    height: 31px;
+    margin: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 4px;
+}
+
+.error {
+    color: #ff0000;
+    font-family: verdana;
+    font-size: 13px;
+    font-weight: normal;
+}
+
+
+.social-share {
+background: rgb(255,255,255); /* Old browsers */
+background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(237,237,237,1) 28%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(28%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(237,237,237,1) 28%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(237,237,237,1) 28%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(237,237,237,1) 28%); /* IE10+ */
+background: linear-gradient(to bottom,  rgba(255,255,255,1) 0%,rgba(237,237,237,1) 28%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0); /* IE6-9 */
+cursor:pointer;
+border:1px solid rgba(229,229,229,1);
+border-radius:3px;
+color: #666;
+padding: 13px 35px 15px;
+margin-right:15px;
+margin-left:0px;
+margin-top: 15px;
+margin-bottom:15px;
+}
+
+.sharing-section{
+margin-top: 10px;
+margin-bottom: 10px;
+}
+.sharing-section a span{
+text-decoration:none;
+color: #666;
+cursor:pointer;
+}
+.fbsharebtn{
+border: medium none;
+background: none repeat scroll 0 0 transparent;
+width: 65px;
+cursor:pointer;
+}
+
+
+
+

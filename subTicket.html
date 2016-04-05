@@ -1,50 +1,84 @@
-<div ng-if="ticket.is_donation=='n'">
+<div ng-if="ticket.is_donation=='n'" ng-init="pushTickets(ticket.id,ticket.availability_msg)">
     <md-list style="padding: 0px">
         <md-list-item class="md-2-line" md-ink-ripple="" ng-click="showDesc = showDesc ? false : true">
+            <!-- Ticket Details Block start -->
             <div class="md-list-item-text">
-                <span class="md-title" flex="" style="text-align: left;">
-                    <i class="fa fa-ticket" style="font-size: 1em">
-                    </i>
+                <div class="md-title" flex="">
+                    <i ng-hide="seatingdata.ticketseatcolor" class="fa fa-ticket" style="font-size: 1em"></i>
                     {{ticket.name}}
-                </span>
-                <p ng-show="showDesc" style="font-size:12px; text-align: left;">
+                </div>
+                <div style="    line-height: 20px;">
+                	<img ng-repeat="src in seatingdata.ticketseatcolor[ticket.id]" style="margin-right: 5px;" ng-src="{{'http://192.168.1.85/main/images/seatingimages/'+src+'.png'}}" /> 
+                </div>
+                <p ng-if="ticket.desc" ng-show="showDesc" style="font-size:12px;">
                     {{ticket.desc}}
                 </p>
             </div>
-            <div class="md-list-item-text">
+            <!-- Ticket Details Block end -->
+            <!-- Price Details Block start -->
+            <div class="md-list-item-text" ng-if="ticket.available=='y'">
                 <span class="md-title" flex="" style="text-align: left;">
-                    <span class="md-title" ng-class="{'cut':parseFloat(ticket.actual_price) &gt; parseFloat(tickets.charging_price)}">
+                    <span class="md-title" ng-class="{'cut':parseFloat(ticket.actual_price) &gt; parseFloat(ticket.charging_price)}">
                         {{ ticket.actual_price | currency:data.currency }}
                     </span>
-                    <span class="" ng-show="parseFloat(ticket.actual_price) &gt; parseFloat(tickets.charging_price)">
+                    <span class="" ng-show="parseFloat(ticket.actual_price) &gt; parseFloat(ticket.charging_price)">
                         {{ ticket.charging_price | currency:data.currency }}
                     </span>
                 </span>
                 <span ng-if="tickets.feecolrequeired=='Y'">
-                        <p class="" ng-hide="parseFloat(ticket.actual_fee)&gt;parseFloat(ticket.charging_fee)">
-                            {{ tickets.reg_flow_wordings.process_fee_label }}:
-                            <span ng-class="{'cut':parseFloat(ticket.actual_fee)&gt;parseFloat(ticket.charging_fee)}">
-                                {{ ticket.actual_fee | currency:tickets.currency }}
-                            </span>
-                        </p>
-                        <span style="display: none;">
-                            {{ tickets.reg_flow_wordings.process_fee_label }}:
+                    <p class="" ng-hide="parseFloat(ticket.actual_fee)&gt;parseFloat(ticket.charging_fee)">
+                        {{ tickets.reg_flow_wordings.process_fee_label }}:
+                        <span ng-class="{'cut':parseFloat(ticket.actual_fee)&gt;parseFloat(ticket.charging_fee)}">
+                            {{ ticket.actual_fee | currency:tickets.currency }}
                         </span>
-                        <span ng-show="parseFloat(ticket.actual_fee)&gt;parseFloat(ticket.charging_fee)">
-                            {{ ticket.charging_fee | currency:tickets.currency }}
-                        </span>
+                    </p>
+                    <span style="display: none;">
+                        {{ tickets.reg_flow_wordings.process_fee_label }}:
+                    </span>
+                    <span ng-show="parseFloat(ticket.actual_fee)&gt;parseFloat(ticket.charging_fee)">
+                        {{ ticket.charging_fee | currency:tickets.currency }}
+                    </span>
                 </span>
             </div>
-            <md-select ng-model="ticket.ticket_selected">
-                <md-option selected="" value="0">
-                    0
-                </md-option>
-                <md-option ng-repeat="num in [] | range:ticket.max:ticket.min" value="{{num}}">
-                    {{num}}
-                </md-option>
-            </md-select>
-            <md-divider>
-            </md-divider>
+            <!-- Price Details Block end -->
+            <!-- Qty Details Block start -->
+            <div ng-if="ticket.available=='y'">
+                <div ng-if="ticket.availability_msg!='NA' &amp;&amp; isSeatingEvent &amp;&amp; ticketsData.seatticketid.indexOf(ticket.id) != -1">
+                    <div style="text-align: center;">
+                        {{ticket.ticket_selected}}
+                        <br>
+                            <md-button ng-click="gotoSeatingsection()" style="margin: 0px;">
+                                Select Tickets
+                            </md-button>
+                        </br>
+                    </div>
+                </div>
+                <div ng-if="ticket.availability_msg!='NA' &amp;&amp; !isSeatingEvent" ng-init="ticket.qtyoptions=getQtyOptions(ticket.min,ticket.max,ticket.ticket_selected)">
+                    <md-select ng-model="ticket.ticket_selected">
+                        <md-option ng-repeat="num in ticket.qtyoptions" value="{{num}}">
+                            {{num}}
+                        </md-option>
+                    </md-select>
+                </div>
+                <div ng-if="ticket.availability_msg!='NA' &amp;&amp; isSeatingEvent &amp;&amp; ticketsData.seatticketid.indexOf(ticket.id) == -1" ng-init="ticket.qtyoptions=getQtyOptions(ticket.min,ticket.max,ticket.ticket_selected)">
+                    <md-select ng-model="ticket.ticket_selected">
+                        <md-option ng-repeat="num in ticket.qtyoptions" value="{{num}}">
+                            {{num}}
+                        </md-option>
+                    </md-select>
+                </div>
+                <div ng-if="ticket.availability_msg=='NA'" style="text-align: right;">
+                    <span class="md-title">
+                        {{ticket.availability_msg}}
+                    </span>
+                </div>
+            </div>
+            <div class="" ng-if="ticket.available=='n'" style="text-align: right;">
+                <span class="md-title">
+                    {{ ticket.availability_msg }}
+                </span>
+            </div>
+            <!-- Qty Details Block start -->
         </md-list-item>
     </md-list>
 </div>

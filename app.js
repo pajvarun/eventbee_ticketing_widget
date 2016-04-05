@@ -45,6 +45,7 @@ eventbee.run(['$rootScope', '$location', '$window', '$document', '$http', functi
         else $location.path('/event');
     };
     $rootScope.baseUrl = 'http://192.168.1.85/tktwidget/registration/';
+    $rootScope.temUrl = 'http://localhost/registration/';
     $rootScope.serverAddress = 'http://192.168.1.85/';
     $rootScope.eid = $location.search().eid;
     $rootScope.pageLocation = 'Tickets';
