@@ -1,4 +1,6 @@
-var eventbee = angular.module('eventbee', ['ngMaterial', 'ngRoute', 'ngAnimate', 'ngSanitize', 'eventbee.controller.tickets', 'eventbee.services']);
+var eventbee = angular.module('eventbee', 
+	['ngMaterial', 'ngRoute', 'ngAnimate', 'ngSanitize', 'eventbee.controller.tickets', 'eventbee.services','eventbee.controller.profile',
+	'eventbee.filters']);
 // GLOBAL CONFIGURATIONS
 eventbee.config(['$routeProvider', '$locationProvider', '$sceDelegateProvider', '$provide', function($routeProvider, $locationProvider, $sceDelegateProvider, $provide) {
     $provide.decorator('$sniffer', ['$delegate', function($delegate) {
@@ -13,13 +15,12 @@ eventbee.config(['$routeProvider', '$locationProvider', '$sceDelegateProvider', 
             //controller: 'tickets',
             reloadOnSearch: false
         })
-        /*
-                    .when('/event/profile', {
-                        templateUrl: '/tktwidget/public/profile.html',
-                        controller: 'profile',
-                        reloadOnSearch: false
-                    })
-                    .when('/event/payment', {
+        .when('/event/profile', {
+            templateUrl: 'profile.html',
+            controller: 'profile',
+            reloadOnSearch: false
+        })
+                    /*.when('/event/payment', {
                         templateUrl: '/tktwidget/public/payment.html',
                         controller: 'payment',
                         reloadOnSearch: false
@@ -44,11 +45,29 @@ eventbee.run(['$rootScope', '$location', '$window', '$document', '$http', functi
         } else if ($rootScope.pageLocation == 'Confirmation') $location.path('/event/payment/');
         else $location.path('/event');
     };
-    $rootScope.baseUrl = 'http://192.168.1.85/tktwidget/registration/';
-    $rootScope.temUrl = 'http://localhost/registration/';
-    $rootScope.serverAddress = 'http://192.168.1.85/';
+    $rootScope.baseUrl = 'http://www.citypartytix.com/tktwidget/registration/';
+        $rootScope.serverAddress = 'http://www.citypartytix.com/';
     $rootScope.eid = $location.search().eid;
     $rootScope.pageLocation = 'Tickets';
     $rootScope.isSeatingEvent = false;
     $rootScope.selectDate = '';
+    $rootScope.date_select='';
+    $rootScope.showTimeoutBar = false;
+	$rootScope.timeOutBg=false;
+	$rootScope.backLinkWording = 'Back To Tickets Page';
+	$rootScope.tryAgain = function(){
+    	 $http.get($rootScope.serverAddress+'embedded_reg/seating/delete_temp_locked_tickets.jsp', {
+             params: {
+                 eid: $rootScope.eid,
+                 tid: $rootScope.transactionId
+             }
+         }).success(function(data,status,headers,config){
+        	  $window.location.href='http://localhost:8181/material/#/event?eid='+$rootScope.eid;
+         	 $rootScope.timeOutBg = false;
+         });
+    };
+	$rootScope.cancelTimeOut = function(){
+    	$window.location.href='http://localhost:8181/material/#/event?eid='+$rootScope.eid;
+    	$rootScope.timeOutBg = false;
+    };
 }]);

@@ -5,9 +5,9 @@
         </title>
         <meta content="width=device-width, initial-scale=1" name="viewport"/>
         <!-- bower:css -->
-        <link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
+        <link href="bower_components/angular-material/angular-material.css" rel="stylesheet"/>
         <!-- endbower -->
-        <link rel="stylesheet" type="text/css" href="css/style.css" />
+        <link href="css/style.css" rel="stylesheet" type="text/css"/>
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet"/>
         <!-- bower:js -->
         <script src="bower_components/jquery/dist/jquery.js"></script>
@@ -20,25 +20,86 @@
         <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
         <!-- endbower -->
         <style>
-        	.groupHeading{
-        		color: #5388c4;
-        	}
-        	.groupTickets{
-        		border-left: 3px solid #5388c4;
-			    padding-left: 5px;
-			    margin-left: -8px;
-			    #border-top: 1px dotted #5388c4;
-    			#border-bottom: 1px dotted #5388c4;
-			}
-			
+            body{
+            padding:0px;
+        }
+        md-toolbar{
+            min-height:50px;
+        }
+        .ticketunavailablepopup_div {
+            background-color: #f5f5f5;
+            border: 20px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 0 20px #000;
+            color: black;
+            float: left;
+            margin-top: -50px;
+            padding: 20px;
+            position: absolute;
+            width: 250px;
+            z-index: 100003;
+        }
+        .groupHeading{
+            color: #5388c4;
+        }
+        .groupTickets{
+            border-left: 3px solid #5388c4;
+            padding-left: 5px;
+            margin-left: -8px;
+            #border-top: 1px dotted #5388c4;
+            #border-bottom: 1px dotted #5388c4;
+        }
+        .descFont{
+            font-size:12px;
+        }
+        .profileMargin{
+            margin: 10px 0;
+        }
         </style>
     </head>
 </html>
 <body ng-app="eventbee">
-   <div ng-view></div>
+<md-content ng-show="showTimeoutBar" class="md-padding" style="padding: 0px;">
+        <md-toolbar class="md-theme-light" style="background-color:#fcf8e3;border-color:#faebcc;padding:15px;">
+            <div class="header">
+                <div layout="row">
+                    <a flex="50" href="javascript:;" ng-click="back()" style="float:left;color:#428bca !important;font-size:14px;text-decoration:none;">
+                        <span ng-mouseover="showLeft=true" ng-mouseleave="showLeft=false">
+                            <i ng-show="showLeft" class="fa fa-angle-double-left"></i> {{backLinkWording}}
+                        </span>
+                    </a>
+                    <span align="right" flex="50" style="float:right;color:#428bca !important;font-size:14px">
+                        Time left:
+                        <strong>
+                            {{timeRemaining | timeRemainingFormatter}}
+                        </strong>
+                        <span>
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </md-toolbar>
+    </md-content>
+    <md-content class="md-padding">
+        <div ng-view="">
+        </div>
+    </md-content>
 </body>
-<script type="text/javascript" src="app.js"></script>
-<script type="text/javascript" src="services.js"></script>
-<script type="text/javascript" src="controller.tickets.js"></script>
-<div id="attendeeloginpopup" class="ticketunavailablepopup_div" style="display:none;"></div>
+<script src="app.js" type="text/javascript"></script>
+<script src="services.js" type="text/javascript"></script>
+<script src="controller.tickets.js" type="text/javascript"></script>
+<script src="controller.profile.js" type="text/javascript"></script>
+<script src="filters.js" type="text/javascript"></script>
 
+<div class="ticketunavailablepopup_div" id="attendeeloginpopup" style="display:none;"></div>
+<div id="backgroundPopup" style="height: 100%; width: 100%; display: none;"></div>
+<div class="backgroundPopup" id="timeoutbackground" ng-show="timeOutBg" style="height:100%; width: 100%;"></div>
+<div class="ticketunavailablepopup_div" id="some" ng-show="timeOutBg" style="top:35%;left:28%;z-index:100002;">
+    <p style="text-align:left;">
+        Sorry, timed out!
+        <input ng-click="tryAgain();" type="button" value="Try Again"/>
+    </p>
+    <a id="imgclose" ng-click="cancelTimeOut();" style="cursor: pointer">
+        <img class="imgclosefortkt" src="http://www.citypartytix.com/home/images/images/close.png" style="margin-right: -37px;margin-top:-92px"/>
+    </a>
+</div>

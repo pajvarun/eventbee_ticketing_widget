@@ -1,0 +1,87 @@
+<div layout="row" layout-align="center center" ng-show="loadingQuestions">
+    <img src="image/loading.gif">
+        Loading...
+    </img>
+</div>
+<div ng-hide="loadingQuestions">
+    <form name="questionForm" ng-submit="sub()">
+        <!-- Buyer profile start -->
+        <md-list>
+            <md-list-item class="md-1-line " md-ink-ripple="" style="padding: 0px">
+                <div class="md-list-item-text">
+                    <b class="md-headline">
+                        {{profileQuestions.buyerheader}}
+                    </b>
+                </div>
+            </md-list-item>
+        </md-list>
+        <div ng-repeat="question in profileQuestions.buyer_questions">
+            <div ng-include="'buyerQuestions.html'">
+            </div>
+        </div>
+        <!-- Buyer profile end -->
+        
+        <!-- Attendee profile start -->
+        <span ng-if="profileQuestions.attendee_questions.length&gt;0">
+            <md-list>
+                <md-list-item class="md-1-line " md-ink-ripple="" style="padding: 0px">
+                    <div class="md-list-item-text">
+                        <b class="md-headline">
+                            Attendee information:
+                        </b>
+                    </div>
+                </md-list-item>
+            </md-list>
+            <div ng-init="ticketIndex = $index" ng-repeat="ticket in profileQuestions.attendee_questions">
+                <span class="md-title">
+                    Ticket: {{ticket.ticket_name}}
+                </span>
+                <div ng-init="profileIndex = $index" ng-repeat="profile in ticket.profiles">
+                    <div class="md-subhead">
+                        Profile # {{ $index+1 }}
+                    </div>
+                    <!-- <md-input-container ng-form="subForm" ng-init="from={}">
+    				<label>Copy from</label>
+    					<md-select name="name" ng-model="from" ng-change=""> -->
+                    <!-- <md-option >Buyer Information</md-option> -->
+                    <!-- <md-option ng-repeat="profile.profileid group by profile.ticketname for profile in allProfiles()"></md-option> -->
+                    <!-- <md-optgroup ng-repeat="data in allProfiles()">
+    						{{data}}
+    					</md-optgroup> -->
+                    <!-- </md-select>
+    				</md-input-container> -->
+                    <div ng-repeat="question in ticket.questions">
+                        <div ng-include="'buyerQuestions.html'">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </span>
+        <!-- Attendee profile end -->
+
+        <!-- Promotion code start-->
+        <span ng-show="{{profileQuestions.enablepromotion}}">
+            <md-list>
+                <md-list-item class="md-1-line " md-ink-ripple="" style="padding: 0px">
+                    <div class="md-list-item-text">
+                        <b class="md-headline">
+                            {{profileQuestions.promotionsectionheader}}
+                        </b>
+                    </div>
+                </md-list-item>
+            </md-list>
+            <md-checkbox ng-model="promotions">
+                {{profileQuestions.promotionsectionmessage}}
+            </md-checkbox>
+        </span>
+        <!-- Promotion code end-->
+
+        <!-- Submit button code start -->
+        <div layout="row" layout-align="end center">
+            <md-button class="md-raised md-warn">
+                {{profileQuestions.profilecountinue}}
+            </md-button>
+        </div>
+        <!-- Submit button code end -->
+    </form>
+</div>

@@ -1,4 +1,4 @@
-<md-content class="md-padding">
+<div>
     <div ng-controller="tickets">
         <div ng-show="data.do_continue">
             <div id="recurring_eve" ng-show="data.is_recurring">
@@ -24,106 +24,109 @@
                 </h3>
             </div>
         </div>
-
-
-        <div class=""   ng-hide="loadingMetadata">
-        <div ng-show="tickets.items.length == 0 &amp;&amp; !data.is_recurring">
-            <div layout="row" layout-align="center center" md-ink-ripple="">
-                <h3>
-                    Tickets are currently unavailable
-                </h3>
+        <div class="" ng-hide="loadingMetadata">
+            <div ng-show="tickets.items.length == 0 &amp;&amp; !data.is_recurring">
+                <div layout="row" layout-align="center center" md-ink-ripple="">
+                    <h3>
+                        Tickets are currently unavailable
+                    </h3>
+                </div>
             </div>
-        </div>
-        <form name="ticketsForm" ng-submit="">
-            <div ng-repeat="ticket in tickets.items">
-                <!-- Group Ticket -->
-                <div ng-if="ticket.type=='group'">
-                    <div class="groupTickets">
-                        <md-content>
-                            <md-list style="padding: 0px">
-                            <!-- <md-list-item class="md-2-line " md-ink-ripple="" style="background-color: rgba(83, 136, 196, 0.49);" ng-click="showGroupDesc = showGroupDesc ? false : true"> -->
-                                <md-list-item class="md-2-line " md-ink-ripple="" ng-click="showGroupDesc = showGroupDesc ? false : true">
-                                    <div class="md-list-item-text">
-                                        <b class="md-headline" style="color: #5388C4;">
-                                            {{ticket.name}}
-                                        </b>
-                                        <br>
-                                        <div style="font-size:12px;line-height: 12px;" ng-show="showGroupDesc" ng-bind-html="ticket.desc"></div>
-                                    </div>
-                                </md-list-item>
-                            </md-list>
-                        </md-content>
-                        <div ng-repeat="ticket in ticket.tickets">
-                            <div ng-include="'subTicket.html'">
+            <form name="ticketsForm" ng-submit="">
+                <div ng-repeat="ticket in tickets.items">
+                    <!-- Group Ticket -->
+                    <div ng-if="ticket.type=='group'">
+<div class="groupTickets">
+                            <md-content>
+                                <md-list style="padding: 0px">
+                                    <!-- <md-list-item class="md-2-line " md-ink-ripple="" style="background-color: rgba(83, 136, 196, 0.49);" ng-click="showGroupDesc = showGroupDesc ? false : true"> -->
+                                    <md-list-item class="md-2-line " md-ink-ripple="" ng-click="showGroupDesc = showGroupDesc ? false : true">
+                                        <div class="md-list-item-text">
+                                            <b class="md-headline" style="color: #5388C4;">
+                                                {{ticket.name}}
+                                            </b>
+                                            <br>
+                                                <div class="descFont" ng-bind-html="ticket.desc" ng-show="showGroupDesc" style="line-height: 12px;">
+                                                </div>
+                                            </br>
+                                        </div>
+                                    </md-list-item>
+                                </md-list>
+                            </md-content>
+                            <div ng-repeat="ticket in ticket.tickets">
+                                <div ng-include="'subTicket.html'">
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <!-- Normal ticket -->
-                <div ng-if="ticket.type=='ticket'">
-                    <div ng-include="'subTicket.html'">
+                    <!-- Normal ticket -->
+                    <div ng-if="ticket.type=='ticket'">
+                        <div ng-include="'subTicket.html'">
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="row inset" ng-show="tickets.disc_exists" layout>
-            <div layout-gt-sm="row" flex>
-                <md-input-container flex="">
-                  <label>{{ tickets.reg_flow_wordings.disc_box_label }}</label>
-                  <input type="text"  ng-model="discountCode">
-                </md-input-container>
-            </div>
-            <div flex >
-                <md-button ng-click="applyDiscount();" class="md-primary md-raised">
-                    {{ tickets.reg_flow_wordings.apply_button_label }}
-                </md-button>
-
-                <img src="image/loading.gif" ng-show="loadingDiscount" />
-                {{ discountsData.disc_msg }}
-            </div>
-            
-            </div>
-            <section layout="row" layout-align="center center" layout-sm="column" layout-wrap="" ng-if="displayBtn">
-                <span flex="">
-                </span>
-                <h4 class="">
-                    {{ tickets.reg_flow_wordings.total_amount_label }} : {{ total() | currency:data.currency }}
-                </h4>
-                <md-button class="md-raised md-warn" ng-click="buy()" ng-disabled="!total()">
-                    {{tickets.reg_flow_wordings.order_button_label}}
-                </md-button>
-            </section>
-
-
-            <!-- Seating section -->
-            <div layout="row" layout-align="center center" ng-show="tickets.items.length > 0 && loadSeating">
-                <img src="image/loading.gif" />&nbsp;Loading Seats...
-            </div>
-            <div  id="seatingsection" ng-if="tickets.items.length > 0 && isSeatingEvent">
-                <div style="border: 1px solid red;  background: none repeat scroll 0px 0px #FBFFAF;" id="tooltip" ng-show="showPopup" ng-style="popupStyle">
-                    <span ng-bind-html="tooltipHtml"></span>
-                </div>
-                <div layout="row">
-                    <div style="width:10%;padding-top:7px;" ng-show="getSectionsLength() > 1">
-                        Select Section :
+                <div class="row inset" layout="" ng-show="tickets.disc_exists">
+                    <div flex="" layout-gt-sm="row">
+                        <md-input-container flex="">
+                            <label>
+                                {{ tickets.reg_flow_wordings.disc_box_label }}
+                            </label>
+                            <input ng-model="discountCode" type="text">
+                            </input>
+                        </md-input-container>
                     </div>
-                    <div ng-show="getSectionsLength() > 1">
-                        <select class="form-control" ng-init="initSectionId();setSection(sectionId)" ng-model="sectionId" ng-options="key as value for (key , value) in allSectionObj" ng-change="setSection(sectionId)">
-                        </select>
-                    </div>
-                    <div ng-if="venuePath!=''"><a ng-click="getLayOutImage();" style="cursor:pointer;text-decoration: none;">{{venueName}}</a>
+                    <div flex="">
+                        <md-button class="md-primary md-raised" ng-click="applyDiscount();">
+                            {{ tickets.reg_flow_wordings.apply_button_label }}
+                        </md-button>
+                        <img ng-show="loadingDiscount" src="image/loading.gif"/>
+                        {{ discountsData.disc_msg }}
                     </div>
                 </div>
-                <br>
-                <table ng-style="backgroundCSS" >
-                    <tr ng-repeat="row in getRowSize()">
-                        <td ng-repeat="col in getColSize()" ng-class="{'NA':!seats.completeseats['s_'+row+'_'+col]}">
-                            <img ng-if="seats.completeseats['s_'+row+'_'+col]" ng-mouseover="showSeatDetails(seats.completeseats['s_'+row+'_'+col],$event)" ng-mouseout="hideSeatDetails()" ng-class="getImageCss(seats.completeseats['s_'+row+'_'+col]) && seats.completeseats['s_'+row+'_'+col].seatSelected ? 'selectedSeat' : 'nonSelectedSeat' " ng-click="seats.completeseats['s_'+row+'_'+col].seatSelected=!seats.completeseats['s_'+row+'_'+col].seatSelected; clickSeat(seats.completeseats['s_'+row+'_'+col],seatSectionId+'_'+row+'_'+col)" ng-src="{{getSeatImage(seats.completeseats['s_'+row+'_'+col])}}" style="height: 17px; width: 17px;">
-                        </td>
-                    </tr>
-                </table>
-            </div>            
-        </form>
+                <section layout="row" layout-align="end center" layout-sm="column" layout-wrap="" ng-if="displayBtn">
+                    <h4 class="">
+                        {{ tickets.reg_flow_wordings.total_amount_label }} : {{ total() | currency:data.currency }}
+                    </h4>
+                    <md-button class="md-raised md-warn" ng-click="buy()" ng-disabled="!total()">
+                        {{tickets.reg_flow_wordings.order_button_label}}
+                    </md-button>
+                </section>
+                <!-- Seating section -->
+                <div layout="row" layout-align="center center" ng-show="tickets.items.length &gt; 0 &amp;&amp; loadSeating">
+                    <img src="image/loading.gif"/>
+                    Loading Seats...
+                </div>
+                <div id="seatingsection" ng-if="tickets.items.length &gt; 0 &amp;&amp; isSeatingEvent">
+                    <div id="tooltip" ng-show="showPopup" ng-style="popupStyle" style="border: 1px solid red;  background: none repeat scroll 0px 0px #FBFFAF;">
+                        <span ng-bind-html="tooltipHtml">
+                        </span>
+                    </div>
+                    <div layout="row">
+                        <div ng-show="getSectionsLength() &gt; 1" style="width:10%;padding-top:7px;">
+                            Select Section :
+                        </div>
+                        <div ng-show="getSectionsLength() &gt; 1">
+                            <select class="form-control" ng-change="setSection(sectionId)" ng-init="initSectionId();setSection(sectionId)" ng-model="sectionId" ng-options="key as value for (key , value) in allSectionObj">
+                            </select>
+                        </div>
+                        <div ng-if="venuePath!=''">
+                            <a ng-click="getLayOutImage();" style="cursor:pointer;text-decoration: none;">
+                                {{venueName}}
+                            </a>
+                        </div>
+                    </div>
+                    <br>
+                        <table ng-style="backgroundCSS">
+                            <tr ng-repeat="row in getRowSize()">
+                                <td ng-class="{'NA':!seats.completeseats['s_'+row+'_'+col]}" ng-repeat="col in getColSize()">
+                                    <img ng-class="getImageCss(seats.completeseats['s_'+row+'_'+col]) &amp;&amp; seats.completeseats['s_'+row+'_'+col].seatSelected ? 'selectedSeat' : 'nonSelectedSeat' " ng-click="seats.completeseats['s_'+row+'_'+col].seatSelected=!seats.completeseats['s_'+row+'_'+col].seatSelected; clickSeat(seats.completeseats['s_'+row+'_'+col],seatSectionId+'_'+row+'_'+col)" ng-if="seats.completeseats['s_'+row+'_'+col]" ng-mouseout="hideSeatDetails()" ng-mouseover="showSeatDetails(seats.completeseats['s_'+row+'_'+col],$event)" ng-src="{{getSeatImage(seats.completeseats['s_'+row+'_'+col])}}" style="height: 17px; width: 17px;">
+                                    </img>
+                                </td>
+                            </tr>
+                        </table>
+                    </br>
+                </div>
+            </form>
         </div>
     </div>
-</md-content>
+</div>

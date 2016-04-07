@@ -14,16 +14,18 @@ angular.module('eventbee.controller.tickets', []).controller('tickets', ['$scope
             $scope.showGroupDesc = '';
             $scope.allTickets = [];
             $scope.availabelTickets = [];
+            $rootScope.showTimeoutBar = false;
             $scope.tickets = {
                 items: []
             };
             if ($location.search().eid && !isNaN($location.search().eid)) {
+                /* API Call */
                 $http.get($rootScope.baseUrl + 'getEventMetaData.jsp?api_key=123&event_id=' + $rootScope.eid).success(function(data, status, headers, config) {
                     $scope.data = data;
                     $rootScope.isSeatingEvent = data.has_seating;
                     $scope.venueid = data.venueid;
                     $scope.loadingMetadata = false;
-                    if (!$scope.data.is_recurring) loadTicketsData($rootScope.temUrl + 'getEventTickets.jsp?api_key=123&seating_enable=' + $rootScope.isSeatingEvent + '&event_id=' + $location.search().eid + ($location.search().tid ? '&transaction_id=' + $location.search().tid : ''));
+                    if (!$scope.data.is_recurring) loadTicketsData($rootScope.baseUrl + 'getEventTickets.jsp?api_key=123&seating_enable=' + $rootScope.isSeatingEvent + '&event_id=' + $location.search().eid + ($location.search().tid ? '&transaction_id=' + $location.search().tid : ''));
                     else {
                         $scope.$watch('date_selected', function(newVal, oldVal) {
                             if (newVal == null) {
@@ -41,8 +43,8 @@ angular.module('eventbee.controller.tickets', []).controller('tickets', ['$scope
                             if (newVal) {
                                 $scope.eventDate = newVal;
                                 $rootScope.selectDate = newVal;
-                                if ($location.search().evtDate == newVal) loadTicketsData($rootScope.temUrl + 'getEventTickets.jsp?api_key=123&seating_enable=' + $rootScope.isSeatingEvent + '&event_id=' + $location.search().eid + '&event_date=' + encodeURIComponent(newVal) + ($location.search().tid ? '&transaction_id=' + $location.search().tid : ''));
-                                else loadTicketsData($rootScope.temUrl + 'getEventTickets.jsp?api_key=123&seating_enable=' + $rootScope.isSeatingEvent + '&event_id=' + $location.search().eid);
+                                if ($location.search().evtDate == newVal) loadTicketsData($rootScope.baseUrl + 'getEventTickets.jsp?api_key=123&seating_enable=' + $rootScope.isSeatingEvent + '&event_id=' + $location.search().eid + '&event_date=' + encodeURIComponent(newVal) + ($location.search().tid ? '&transaction_id=' + $location.search().tid : ''));
+                                else loadTicketsData($rootScope.baseUrl + 'getEventTickets.jsp?api_key=123&seating_enable=' + $rootScope.isSeatingEvent + '&event_id=' + $location.search().eid);
                             }
                         });
                     }
@@ -66,6 +68,7 @@ angular.module('eventbee.controller.tickets', []).controller('tickets', ['$scope
             });
             var loadTicketsData = function(url) {
                 $scope.loadingMetadata = true;
+                /* API Call */
                 $http.get(url).success(function(data, status, headers, config) {
                     $scope.tickets = data;
                     $scope.data.currency = data.currency;
@@ -93,6 +96,7 @@ angular.module('eventbee.controller.tickets', []).controller('tickets', ['$scope
                     // seating
                     if ($rootScope.isSeatingEvent) {
                         $scope.loadSeating = true;
+                        /* API Call */
                         $http.get('http://192.168.1.85/tktwidget/registration/getSeatingInfo.jsp?&timestamp=' + new Date().getTime(), {
                             params: {
                                 eid: $rootScope.eid,
@@ -175,6 +179,7 @@ angular.module('eventbee.controller.tickets', []).controller('tickets', ['$scope
                 $scope.loadingDiscount = true;
                 var trasactionid = '';
                 if ($location.search().tid) trasactionid = $location.search().tid;
+                /* API Call */
                 $http.get($rootScope.baseUrl + 'applyDiscount.jsp', {
                     params: {
                         api_key: '123',
@@ -313,7 +318,7 @@ angular.module('eventbee.controller.tickets', []).controller('tickets', ['$scope
                         var topPos = $window.pageYOffset + 140;
                         if (seat.seatSelected) {
                             seat.seatSelected = false;
-                            var radio = "<p style='text-align:left;'>&nbsp;&nbsp;This seat is assigned to multiple Ticket Types, &nbsp;select one</p><a id='imgclose'><img src='/home/images/images/close.png' class='imgclosefortkt'></a>";
+                            var radio = "<p style='text-align:left;'>&nbsp;&nbsp;This seat is assigned to multiple Ticket Types, &nbsp;select one</p><a id='imgclose'><img src='http://www.eventbee.com/home/images/images/close.png' class='imgclosefortkt'></a>";
                             radio = radio + "<table>";
                             for (var i = 0; i < tktids.length; i++) {
                                 var tktID = tktids[i];
@@ -477,24 +482,122 @@ angular.module('eventbee.controller.tickets', []).controller('tickets', ['$scope
                     $scope.getSelectedTicketid(selectedtktid, 'addseat', seat, seatIndex);
                 }
             }
+
+
+            /* Submit Button functionality here start */
+            $scope.buy = function(){
+                var alertMsgCount = 0;
+                var finalTickets = {
+                    selected_tickets: [],
+                    api_Key: '123'
+                };
+                angular.forEach($scope.tickets.items, function(item, index){
+                    if (item.type == 'ticket'){
+                        if(item.is_donation == 'n'){
+                            if(item.ticket_selected > 0 && (item.min > item.ticket_selected)){
+                                alert("for \""+item.name+"\", the minimum seats quantity is "+item.min+",you selected only "+item.ticket_selected+" seats");
+                                alertMsgCount++;
+                            }
+                            if (item.ticket_selected > 0)
+                                finalTickets.selected_tickets.push({
+                                    ticket_id: item.id,
+                                    qty: item.ticket_selected,
+                                    seat_ids:item.seatIndexes=item.seatIndexes==undefined?[]:item.seatIndexes
+                                });
+                        }else if (item.is_donation == 'y'){
+                            if (item.donation_amount)
+                                finalTickets.selected_tickets.push({
+                                    ticket_id: item.id,
+                                    amount: item.donation_amount
+                                });
+                        }
+                    }else if (item.type == 'group'){
+                        angular.forEach(item.tickets, function(item, index) {
+                            if (item.is_donation == 'n') {
+                                if(item.ticket_selected > 0 && (item.min > item.ticket_selected)){
+                                    alert("for \""+item.name+"\", the minimum seats quantity is "+item.min+",you selected only "+item.ticket_selected+" seats");
+                                    alertMsgCount++;
+                                }
+                                if (item.ticket_selected > 0)
+                                    finalTickets.selected_tickets.push({
+                                        ticket_id: item.id,
+                                        qty: item.ticket_selected,
+                                        seat_ids:item.seatIndexes=item.seatIndexes==undefined?[]:item.seatIndexes
+                                    });
+                            } else if (item.is_donation == 'y') {
+                                if (item.donation_amount)
+                                    finalTickets.selected_tickets.push({
+                                        ticket_id: item.id,
+                                        amount: item.donation_amount
+                                    });
+                            }
+                        });
+                    }
+                });
+            finalTickets.discountCode = $scope.discountsData.disc_code;
+            finalTickets.event_id = $rootScope.eid;
+            if ($scope.tickets.is_recurring)
+                finalTickets.event_date = $scope.selectedDate.value;
+            if(alertMsgCount == 0){
+                if(alertMsgCount == 0){
+                    $scope.loadingTransaction = true;
+                    /* API Call */
+                $http.get($rootScope.baseUrl + 'setTicketQuantities.jsp', {
+                    params: {
+                        disc_code: finalTickets.discountCode,
+                        api_Key: finalTickets.api_Key,
+                        event_id: finalTickets.event_id,
+                        event_date: finalTickets.event_date,
+                        selected_tickets: JSON.stringify(finalTickets.selected_tickets),
+                        transaction_id: ($location.search().tid) ? $location.search().tid : '',
+                        context : $rootScope.context
+                            
+                    }
+                }).success(function(data, status, headers, config) {
+                    //alert("the final data is::"+JSON.stringify(data));
+                    $scope.loadingTransaction = false;
+                    if (data.status == 'success') {
+                        $scope.loadingTransaction = true;
+                        $rootScope.transactionDetails = data.details;
+                        $location.search('eid', $rootScope.eid);
+                        $location.search('tid', $rootScope.transactionDetails.tid);
+                        if($scope.discountApplied)
+                        $location.search('discountCode',$scope.discountCode);
+                        else
+                        $location.search('discountCode',null);  
+                        
+                        if ($scope.tickets.is_recurring)
+                             $location.search('evtDate',$scope.selectedDate.value);
+                        else
+                             $location.search('evtDate',null);
+                        
+                        $location.path('/event/profile');
+                    } else if(data.status =='fail' && data.reason=='event-level-qty-criteria'){
+                         $scope.loadingTransaction = false;
+                         var avalbleQty = data.details.remaining_qty<=0 ? 0 : data.details.remaining_qty;
+                         alert('For "'+data.details.eventname+'" selected quantity is '+data.details.selected_qty+' and currently available quantity is '+avalbleQty);
+                    }else if(data.status =='fail' && data.reason=='Applied code is Unavailable'){
+                        var agree = confirm(data.reason);
+                            $scope.discountApplied = false;
+                            $scope.discountsData = {};
+                        if(agree){
+                            $scope.buy();
+                        }
+                        
+                    }else{
+                         $scope.loadingTransaction = false;
+                         alert('Unknown error occured. Please try again');
+                    }
+                    
+                }).error(function(data, status, headers, config) {
+                    $scope.loadingTransaction = false;
+                    alert('Unknown error occured. Please try refreshing the page');
+                });
+                   }
+            }
+            }
+
+
+
         }
-    ])
-    /*.filter('range', function() {
-        return function(input, max, min) {
-            max = parseInt(max);
-            min = parseInt(min);
-            for (var i = min; i <= max; i++) {
-                input.push(i);
-            }
-            return input;
-        };
-        var ticketsSelected = 0;
-        angular.forEach($scope.data.items, function(item, index) {
-            if (item.type == 'ticket') {
-                if (item.is_donation == 'n')
-                    if (item.ticket_selected > 0) ticketsSelected++;
-            }
-        });
-        return ticketsSelected > 0;
-    })*/
-;
+    ]);

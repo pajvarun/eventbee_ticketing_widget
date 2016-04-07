@@ -3,14 +3,21 @@
         <md-list-item class="md-2-line" md-ink-ripple="" ng-click="showDesc = showDesc ? false : true">
             <!-- Ticket Details Block start -->
             <div class="md-list-item-text">
-                <div class="md-title" flex="">
-                    <i ng-hide="seatingdata.ticketseatcolor" class="fa fa-ticket" style="font-size: 1em"></i>
+                <div class="md-title" flex="" style="line-height: 20px;">
+                    <i class="fa fa-ticket" ng-hide="seatingdata.ticketseatcolor" style="font-size: 1em">
+                    </i>
                     {{ticket.name}}
                 </div>
                 <div style="    line-height: 20px;">
-                	<img ng-repeat="src in seatingdata.ticketseatcolor[ticket.id]" style="margin-right: 5px;" ng-src="{{'http://192.168.1.85/main/images/seatingimages/'+src+'.png'}}" /> 
+                    <img ng-repeat="src in seatingdata.ticketseatcolor[ticket.id]" ng-src="{{'http://192.168.1.85/main/images/seatingimages/'+src+'.png'}}" style="margin-right: 5px;"/>
                 </div>
-                <p ng-if="ticket.desc" ng-show="showDesc" style="font-size:12px;">
+                <small class="">
+                    {{ ticket.small_desc }}
+                </small>
+                <p ng-if="ticket.mgr_config_msg!=''" class="descFont">
+                    {{ ticket.mgr_config_msg }}
+                </p>
+                <p ng-if="ticket.desc" ng-show="showDesc" class="descFont">
                     {{ticket.desc}}
                 </p>
             </div>
@@ -81,4 +88,54 @@
             <!-- Qty Details Block start -->
         </md-list-item>
     </md-list>
+</div>
+<div ng-if="ticket.is_donation=='y'">
+    <md-list-item class="md-2-line" md-ink-ripple="" ng-click="showDesc = showDesc ? false : true">
+        <!-- Donation Ticket Details Block Start -->
+        <div class="md-list-item-text">
+            <div class="md-title" flex="" style="line-height: 20px;">
+                <i class="fa fa-ticket" ng-hide="seatingdata.ticketseatcolor" style="font-size: 1em">
+                </i>
+                {{ticket.name}}
+            </div>
+            <small class="">
+                {{ ticket.small_desc }}
+            </small>
+            <p ng-if="ticket.mgr_config_msg!=''" class="descFont">
+                {{ ticket.mgr_config_msg }}
+            </p>
+            <p ng-if="ticket.desc" ng-show="showDesc" class="descFont">
+                {{ticket.desc}}
+            </p>
+        </div>
+        <!-- Donation Ticket Details Block End -->
+        <div class="md-list-item-text" ng-if="ticket.available=='y'">
+            <div ng-form="subForm" ng-if="ticket.availability_msg!='NA'">
+                <md-input-container flex="">
+                    <label>
+                        {{ ticketsData.currency }}
+                    </label>
+                    <input min="0" name="name" ng-model="ticket.donation_amount" type="number"/>
+                </md-input-container>
+            </div>
+            <div ng-form="subForm" ng-if="ticket.availability_msg=='NA'">
+                <md-input-container flex="">
+                    <label>
+                        {{ ticketsData.currency }}
+                    </label>
+                    <input disabled="disabled" min="0" name="name" ng-model="ticket.donation_amount" type="number"/>
+                </md-input-container>
+            </div>
+            <div ng-if="ticket.availability_msg=='NA'" style="text-align: right;">
+                <span class="md-title">
+                    {{ticket.availability_msg}}
+                </span>
+            </div>
+        </div>
+        <div ng-if="ticket.available=='n'">
+            <span class="md-title">
+                {{ ticket.availability_msg }}
+            </span>
+        </div>
+    </md-list-item>
 </div>

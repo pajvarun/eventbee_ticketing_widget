@@ -1,0 +1,88 @@
+<div class="md-inline-form" layout="column" ng-cloak="">
+    <div layout-gt-sm="row">
+
+        <!-- Text box code start -->
+        <md-input-container class="profileMargin md-block" flex-gt-sm="" ng-cloak="" ng-form="subForm" ng-if="question.type=='text'">
+            <div ng-if="question.id!='email'">
+                <span ng-if="question.id=='fname'">
+                    <span ng-init="question.response=fbfirstname!=''?fbfirstname:''">
+                    </span>
+                </span>
+                <span ng-if="question.id=='lname'">
+                    <span ng-init="question.response=fblastname!=''?fblastname:''">
+                    </span>
+                </span>
+                <label>
+                    {{question.label}}
+                </label>
+                <input name="name" ng-model="question.response" ng-required="question.required=='y'"/>
+            </div>
+            <div ng-if="question.id=='email'">
+                <span ng-init="question.response=fbemail!=''?fbemail:''">
+                </span>
+                <label>
+                    {{question.label}}
+                </label>
+                <input class="form-control" name="name" ng-model="question.response" ng-required="question.required=='y'" type="email"/>
+            </div>
+        </md-input-container>
+        <!-- Text box code end -->
+
+        <!-- TextArea code start -->
+        <md-input-container class="profileMargin md-block" flex-gt-sm="" ng-cloak="" ng-form="subForm" ng-if="question.type=='textarea'">
+            <label>
+                {{question.label}}
+            </label>
+            <textarea md-maxlength="150" name="name" ng-model="question.response" ng-required="question.required=='y'">
+            </textarea>
+        </md-input-container>
+        <!-- TextArea code end -->
+
+        <!-- Radio code start -->
+        <md-input-container class="profileMargin md-block" flex-gt-sm="" ng-cloak="" ng-form="subForm" ng-if="question.type=='radio'" ng-init="tempoptions=question.options">
+            <label>
+                {{question.label}}
+            </label>
+            <br>
+                <br>
+                    <md-radio-group ng-model="selected" ng-required="question.required=='y'">
+                        <md-radio-button aria-label="{{ option.label }}" ng-repeat="option in question.options" ng-value="option.value" style="margin-right: 10px;">
+                            {{option.display}}
+                        </md-radio-button>
+                    </md-radio-group>
+                </br>
+            </br>
+        </md-input-container>
+        <!-- Radio code end -->
+
+        <!-- CheckBox code start -->
+        <md-input-container class="profileMargin md-block" flex-gt-sm="" ng-form="subForm" ng-if="question.type=='checkbox'" ng-init="checkboxoptions=question.options">
+            <span ng-init="question.response={}">
+            </span>
+            <label>
+                {{question.label}}
+            </label>
+            <br>
+                <span ng-repeat="option in question.options">
+                    <md-checkbox ng-model="question.response[option.value]">
+                        {{ option.display }}
+                    </md-checkbox>
+                </span>
+            </br>
+        </md-input-container>
+        <!-- CheckBox code end -->
+        
+        <!-- Select code start -->
+        <md-input-container class="profileMargin md-block" flex-gt-sm="" ng-form="subForm" ng-if="question.type=='select'" ng-init="selectoptions=question.options">
+            <label>
+                {{question.label}}
+            </label>
+            <md-select name="name" ng-model="question.response" ng-required="question.required=='y'">
+                <md-option ng-repeat="option in question.options" ng-value="option.value">
+                    {{ option.display }}
+                </md-option>
+            </md-select>
+        </md-input-container>
+        <!-- Select code end -->
+    </div>
+</div>
