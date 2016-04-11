@@ -77,7 +77,11 @@
                 </span>
             </br>
             <span ng-repeat="subqns in checkboxoptions">
-            	{{subqns}}
+            	<div ng-if="question.response[subqns.value]==true" ng-animate=" 'animate'" class="animate-enter animate-enter-active">
+            		 <span ng-repeat="subQuestion in subqns.sub_questions">
+            		 	<div ng-include="'subBuyerQuestions.html'" ></div>
+            		 </span>
+            	</div>
             </span>
         </md-input-container>
         <!-- CheckBox code end -->
@@ -92,6 +96,14 @@
                     {{ option.display }}
                 </md-option>
             </md-select>
+            <br>
+            <span ng-repeat="subqns in selectoptions">
+            	<div ng-if="question.response==subqns.value" ng-animate="'animate'" class="animate-enter animate-enter-active">
+            		<span ng-repeat="subQuestion in subqns.sub_questions">
+            			<div ng-include="'subBuyerQuestions.html'" ></div>
+            		</span>
+            	</div>
+            </span>
         </md-input-container>
         <!-- Select code end -->
         
