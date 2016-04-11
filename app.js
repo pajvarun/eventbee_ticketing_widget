@@ -37,6 +37,7 @@ eventbee.config(['$routeProvider', '$locationProvider', '$sceDelegateProvider', 
 // ROOT SCOPE
 eventbee.run(['$rootScope', '$location', '$window', '$document', '$http', function($rootScope, $location, $window, $document, $http) {
     $rootScope.back = function() {
+    	$rootScope.showProcess=true;
         //alert($rootScope.pageLocation);
         if ($rootScope.pageLocation == 'Profiles') $location.path('/event');
         else if ($rootScope.pageLocation == 'Payments') {
@@ -55,6 +56,7 @@ eventbee.run(['$rootScope', '$location', '$window', '$document', '$http', functi
     $rootScope.showTimeoutBar = false;
 	$rootScope.timeOutBg=false;
 	$rootScope.backLinkWording = 'Back To Tickets Page';
+	$rootScope.showProcess=true;
 	$rootScope.tryAgain = function(){
     	 $http.get($rootScope.serverAddress+'embedded_reg/seating/delete_temp_locked_tickets.jsp', {
              params: {

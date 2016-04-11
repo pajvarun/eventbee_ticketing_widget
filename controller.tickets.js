@@ -72,6 +72,7 @@ angular.module('eventbee.controller.tickets', []).controller('tickets', ['$scope
                 $http.get(url).success(function(data, status, headers, config) {
                     $scope.tickets = data;
                     $scope.data.currency = data.currency;
+                    $rootScope.showProcess=false;
                     $scope.loadingMetadata = false;
                     $scope.showDesc = $scope.tickets.ticket_desc_mode != 'collapse';
                     $scope.showGroupDesc = $scope.tickets.ticket_group_desc_mode != 'collapse';
@@ -192,8 +193,17 @@ angular.module('eventbee.controller.tickets', []).controller('tickets', ['$scope
                     //alert("the data is::"+JSON.stringify(data));
                     $scope.discountsData = data;
                     $scope.loadingDiscount = false;
-                    if (data.status == 'fail') $scope.discountApplied = false;
-                    else $scope.discountApplied = true;
+                    $scope.loadingDiscount = false;
+                    if (data.status == 'fail'){ 
+                        $scope.discountApplied = false;
+                        $rootScope.clr1 = true;
+                        $rootScope.clr = false;
+                    }
+                    else{
+                        $scope.discountApplied = true;
+                        $rootScope.clr = true;
+                        $rootScope.clr1 = false;
+                    }
                 }).error(function(data, status, headers, config) {});
             };
             $scope.$watch('discountsData', function(newValue, oldValue) {
@@ -486,6 +496,7 @@ angular.module('eventbee.controller.tickets', []).controller('tickets', ['$scope
 
             /* Submit Button functionality here start */
             $scope.buy = function(){
+                $rootScope.showProcess=true;
                 var alertMsgCount = 0;
                 var finalTickets = {
                     selected_tickets: [],

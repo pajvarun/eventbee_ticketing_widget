@@ -24,6 +24,7 @@ angular.module('eventbee.controller.profile', []).controller('profile', ['$scope
             }
         }).success(function(data, status, headers, config) {
             $scope.profileQuestions = data;
+            $rootScope.showProcess=false;
            // console.log(data);
             $scope.loadingQuestions = false;
             $rootScope.totalMinutes = Number(data.timediffrence);

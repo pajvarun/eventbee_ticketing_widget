@@ -1,0 +1,89 @@
+<div class="md-inline-form" layout="column" ng-cloak="">
+    <div layout-gt-sm="row">
+
+        <!-- Text box code start -->
+        <md-input-container class="profileMargin md-block" flex-gt-sm="" ng-cloak="" ng-form="subForm" ng-if="subQuestion.type=='text'">
+            <div ng-if="subQuestion.id!='email'">
+                <span ng-if="subQuestion.id=='fname'">
+                    <span ng-init="subQuestion.response=fbfirstname!=''?fbfirstname:''">
+                    </span>
+                </span>
+                <span ng-if="subQuestion.id=='lname'">
+                    <span ng-init="subQuestion.response=fblastname!=''?fblastname:''">
+                    </span>
+                </span>
+                <label>
+                    {{subQuestion.label}}
+                </label>
+                <input name="name" ng-model="subQuestion.response" ng-required="subQuestion.required=='y'"/>
+            </div>
+            <div ng-if="subQuestion.id=='email'">
+                <span ng-init="subQuestion.response=fbemail!=''?fbemail:''">
+                </span>
+                <label>
+                    {{subQuestion.label}}
+                </label>
+                <input class="form-control" name="name" ng-model="subQuestion.response" ng-required="subQuestion.required=='y'" type="email"/>
+            </div>
+        </md-input-container>
+        <!-- Text box code end -->
+
+        <!-- TextArea code start -->
+        <md-input-container class="profileMargin md-block" flex-gt-sm="" ng-cloak="" ng-form="subForm" ng-if="subQuestion.type=='textarea'">
+            <label>
+                {{subQuestion.label}}
+            </label>
+            <textarea md-maxlength="150" name="name" ng-model="subQuestion.response" ng-required="subQuestion.required=='y'">
+            </textarea>
+        </md-input-container>
+        <!-- TextArea code end -->
+
+        <!-- Radio code start -->
+        <md-input-container class="profileMargin md-block" flex-gt-sm="" ng-cloak="" ng-form="subForm" ng-if="subQuestion.type=='radio'" ng-init="tempoptions=question.options">
+            <label>
+                {{subQuestion.label}}
+            </label>
+            <br>
+                <br>
+                    <md-radio-group ng-model="subSelected.response" ng-required="subQuestion.required=='y'">
+                        <md-radio-button aria-label="{{ option.label }}" ng-repeat="option in subQuestion.options" ng-value="option.value" style="margin-right: 10px;">
+                            {{option.display}}
+                        </md-radio-button>
+                    </md-radio-group>
+                </br>
+            </br>
+        </md-input-container>
+        <!-- Radio code end -->
+
+        <!-- CheckBox code start -->
+        <md-input-container class="profileMargin md-block" flex-gt-sm="" ng-form="subForm" ng-if="subQuestion.type=='checkbox'" ng-init="checkboxoptions=question.options">
+            <span ng-init="subQuestion.response={}">
+            </span>
+            <label>
+                {{subQuestion.label}}
+            </label>
+            <br>
+                <span ng-repeat="option in subQuestion.options">
+                    <md-checkbox ng-model="subQuestion.response[option.value]">
+                        {{ option.display }}
+                    </md-checkbox>
+                </span>
+            </br>
+        </md-input-container>
+        <!-- CheckBox code end -->
+
+        <!-- Select code start -->
+        <md-input-container class="profileMargin md-block" flex-gt-sm="" ng-form="subForm" ng-if="subQuestion.type=='select'" ng-init="selectoptions=question.options">
+            <label>
+                {{subQuestion.label}}
+            </label>
+            <md-select name="name" ng-model="subQuestion.response" ng-required="subQuestion.required=='y'">
+                <md-option ng-repeat="option in subQuestion.options" ng-value="option.value">
+                    {{ option.display }}
+                </md-option>
+            </md-select>
+        </md-input-container>
+        <!-- Select code end -->
+        
+    </div>
+</div>

@@ -55,11 +55,17 @@
         .profileMargin{
             margin: 10px 0;
         }
+        md-progress-linear ._md-container{
+            height: 3px;
+        }
         </style>
     </head>
 </html>
 <body ng-app="eventbee">
-<md-content ng-show="showTimeoutBar" class="md-padding" style="padding: 0px;">
+<div ng-show="showProcess">
+    <md-progress-linear ng-show="true" md-mode="indeterminate" style="position: fixed;"></md-progress-linear>    
+</div>
+<md-content ng-show="showTimeoutBar" class="md-padding" style="padding: 0px;top:4px;">
         <md-toolbar class="md-theme-light" style="background-color:#fcf8e3;border-color:#faebcc;padding:15px;">
             <div class="header">
                 <div layout="row">

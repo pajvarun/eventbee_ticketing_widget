@@ -1,3 +1,11 @@
+<style>
+.success{
+    color:green;
+}
+.has-error{
+    color:red;
+}
+</style>
 <div>
     <div ng-controller="tickets">
         <div ng-show="data.do_continue">
@@ -25,18 +33,11 @@
             </div>
         </div>
         <div class="" ng-hide="loadingMetadata">
-            <div ng-show="tickets.items.length == 0 &amp;&amp; !data.is_recurring">
-                <div layout="row" layout-align="center center" md-ink-ripple="">
-                    <h3>
-                        Tickets are currently unavailable
-                    </h3>
-                </div>
-            </div>
             <form name="ticketsForm" ng-submit="">
                 <div ng-repeat="ticket in tickets.items">
                     <!-- Group Ticket -->
                     <div ng-if="ticket.type=='group'">
-<div class="groupTickets">
+                        <div class="groupTickets">
                             <md-content>
                                 <md-list style="padding: 0px">
                                     <!-- <md-list-item class="md-2-line " md-ink-ripple="" style="background-color: rgba(83, 136, 196, 0.49);" ng-click="showGroupDesc = showGroupDesc ? false : true"> -->
@@ -80,7 +81,7 @@
                             {{ tickets.reg_flow_wordings.apply_button_label }}
                         </md-button>
                         <img ng-show="loadingDiscount" src="image/loading.gif"/>
-                        {{ discountsData.disc_msg }}
+                        <span ng-class="{'success': clr, 'has-error': clr1}">{{ discountsData.disc_msg }}</span>
                     </div>
                 </div>
                 <section layout="row" layout-align="end center" layout-sm="column" layout-wrap="" ng-if="displayBtn">
@@ -127,6 +128,13 @@
                     </br>
                 </div>
             </form>
+            <div ng-show="tickets.items.length == 0 &amp;&amp; !data.is_recurring">
+                <div layout="row" layout-align="center center" md-ink-ripple="">
+                    <h3>
+                        Tickets are currently unavailable
+                    </h3>
+                </div>
+            </div>
         </div>
     </div>
 </div>

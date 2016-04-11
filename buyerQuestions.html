@@ -52,6 +52,13 @@
                     </md-radio-group>
                 </br>
             </br>
+             <span ng-repeat="subqns in tempoptions">
+             	<div ng-if="selected==subqns.value" ng-animate=" 'animate'" class="animate-enter animate-enter-active" >
+             		<span ng-repeat="subQuestion in subqns.sub_questions">
+             			<div ng-include="'subBuyerQuestions.html'" ></div>
+             		</span>
+             	</div>
+             </span>
         </md-input-container>
         <!-- Radio code end -->
 
@@ -69,6 +76,9 @@
                     </md-checkbox>
                 </span>
             </br>
+            <span ng-repeat="subqns in checkboxoptions">
+            	{{subqns}}
+            </span>
         </md-input-container>
         <!-- CheckBox code end -->
 
